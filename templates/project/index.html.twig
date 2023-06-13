@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProjectController!{% endblock %}
+{% block title 'Projects' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="w-full">
+    <h1 class="p-2 text-center text-3xl italic underline font-bold">Projects</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Dev/Symfony/ProjectManager/src/Controller/ProjectController.php'|file_link(0) }}">src/Controller/ProjectController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Dev/Symfony/ProjectManager/templates/project/index.html.twig'|file_link(0) }}">templates/project/index.html.twig</a></code></li>
-    </ul>
+    <p class="text-center text-slate-700">Here is the full list of created projects : </p>
+
+    {% for project in projects %}
+        <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+            <h2 class="text-lg italic underline">{{ project.name }}</h2>
+            <p class="ml-3">{{ project.presentation }}</p>
+        </div>
+{% endfor %}
 </div>
+
 {% endblock %}
