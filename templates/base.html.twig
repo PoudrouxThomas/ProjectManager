@@ -15,7 +15,9 @@
     <body>
         {{ include('partials/_nav.html.twig') }}
 
-        {% block body %}{% endblock %}
+        <div class="w-full p-5">
+            {% block body %}{% endblock %}
+        </div>
 
         {{ include('partials/_footer.html.twig') }}
     </body>

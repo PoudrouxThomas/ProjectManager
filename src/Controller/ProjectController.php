@@ -17,5 +17,21 @@ class ProjectController extends AbstractController
         return $this->render('project/index.html.twig', compact('projects'));
     }
 
+    #[Route('project/{id<[0-9]+>}', name: 'app_project_show')]
+    public function show(int $id, ProjectRepository $projectRepo): Response
+    {
+        $project = $projectRepo->find($id);
+
+        return $this->render('project/show.html.twig',compact('project'));
+    }
+
+    #[Route('project/create', name: 'app_project_create')]
+    public function create()
+    {
+        return $this->render('project/create.html.twig',[
+            
+        ]);
+    }
+
 
 }
