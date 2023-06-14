@@ -14,7 +14,7 @@ final class Version20230613211203 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create projects database.';
+        return 'Create projects table.';
     }
 
     public function up(Schema $schema): void
