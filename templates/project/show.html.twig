@@ -12,6 +12,19 @@
     <p>
         {{ project.presentation }}
     </p>
+
+    {% for task in project.tasks %}
+        <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+            <h2 class="text-lg italic underline">{{ task.name }}</h2>
+            <p class="ml-3">{{ task.description }}</p>
+        </div>
+    {% endfor %}
+
+    <div class="text-right">
+        <a href="{{ path('app_project_create') }}" class="underline text-orange-500 hover:text-orange-600">
+            + Add task
+        </a>
+    </div>
 </div>
 
 {% endblock %}

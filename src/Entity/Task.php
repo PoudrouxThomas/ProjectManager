@@ -25,6 +25,10 @@ class Task
     #[ORM\Column(type: "task_state", length: 255, options: ["default" => "CREATED"])]
     private ?TaskState $state = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +66,18 @@ class Task
     public function setState(?TaskState $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getProjectId(): ?Project
+    {
+        return $this->project_id;
+    }
+
+    public function setProjectId(?Project $project_id): static
+    {
+        $this->project_id = $project_id;
 
         return $this;
     }
