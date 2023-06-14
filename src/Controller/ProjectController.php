@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,11 +28,21 @@ class ProjectController extends AbstractController
     }
 
     #[Route('project/create', name: 'app_project_create')]
-    public function create()
+    public function create(Request $request, ProjectRepository $projectRepo)
     {
-        return $this->render('project/create.html.twig',[
-            
-        ]);
+        $form = $this->createForm(ProjectType::class);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $project  = $form->getData();
+            $projectRepo->save($project, true);
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('project/create.html.twig', compact('form'));
     }
 
 
