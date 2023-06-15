@@ -27,10 +27,17 @@
                         class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
                         TEAM
                     </a>
-                    <a href="#home"
-                        class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
-                        LOGIN
-                    </a>
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}"
+                            class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
+                            LOGOUT
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}"
+                            class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
+                            LOGIN
+                        </a>
+                    {% endif %}
                 </span>
             </div>
         </div>

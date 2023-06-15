@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="max-w-md mx-auto">
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <div>
+            <h1 class="p-2 text-center text-3xl italic underline font-bold">Please sign in</h1>
+        </div>
+        <div class="mt-2">
+            <label for="inputUsername" class="block text-gray-500 uppercase tracking-wider text-sm font-bold required">Username</label>
+            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" autocomplete="username" required autofocus>
+        </div>
+        <div class="mt-2">
+            <label for="inputPassword" class="block text-gray-500 uppercase tracking-wider text-sm font-bold required">Password</label>
+            <input type="password" name="password" id="inputPassword" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" autocomplete="current-password" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+        >
+
+        {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Remember me
+                </label>
+            </div>
+        #}
+
+        <button class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block" type="submit">
+            Sign in
+        </button>
+    </form>
+</div>
+{% endblock %}
