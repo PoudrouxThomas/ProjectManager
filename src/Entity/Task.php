@@ -27,7 +27,7 @@ class Task
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project_id = null;
+    private ?Project $project = null;
 
     public function getId(): ?int
     {
@@ -70,14 +70,14 @@ class Task
         return $this;
     }
 
-    public function getProjectId(): ?Project
+    public function getProject(): ?Project
     {
-        return $this->project_id;
+        return $this->project;
     }
 
-    public function setProjectId(?Project $project_id): static
+    public function setProject(?Project $project): static
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
 
         return $this;
     }

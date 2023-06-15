@@ -29,7 +29,7 @@ class TaskController extends AbstractController
 
             $task
                 ->setState(TaskState::CREATED)
-                ->setProjectId($project);
+                ->setProject($project);
 
             $taskRepo->save($task, true);
 
