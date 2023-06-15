@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<div class="max-w-md mx-auto">
+    <h1 class="p-2 text-center text-3xl italic underline font-bold">Please register</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.username) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password'
+        }) }}
+
+        <button type="submit"  class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block">Register</button>
+    {{ form_end(registrationForm) }}
+</div>
+{% endblock %}
