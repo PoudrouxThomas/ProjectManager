@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'Create project' %}
-
+{% block title %} Project #{{ projectId }} {% endblock %}
+ 
 {% block body %}
 
 <div class="max-w-md mx-auto">
     <div>
-        <h1 class="p-2 text-center text-3xl italic underline font-bold">Create project</h1>
+        <h1 class="p-2 text-center text-3xl italic underline font-bold">Create task</h1>
     </div>
 
     {{ form_start(form) }}
