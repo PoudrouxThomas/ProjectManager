@@ -32,6 +32,8 @@ class TaskController extends AbstractController
                 ->setProject($project);
 
             $taskRepo->save($task, true);
+            
+            $this->addFlash('success', 'Your task has been added to the project !');
 
             return $this->redirectToRoute('app_project_show', ['id' => $projectId]);
         }

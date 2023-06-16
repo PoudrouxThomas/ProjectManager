@@ -39,6 +39,8 @@ class ProjectController extends AbstractController
             $project  = $form->getData();
             $projectRepo->save($project, true);
 
+            $this->addFlash('success', 'Project created !');
+
             return $this->redirectToRoute('app_home');
         }
 

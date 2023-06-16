@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,12 +17,12 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('name', TextType:: class, [
-                'constaints' => [
+                'constraints' => [
                     new NotBlank,
                     new Length(['min' => 5])
                 ]
             ])
-            ->add('description', TextAreaType::class, [
+            ->add('description', TextareaType::class, [
                 'constraints' => [
                     new NotBlank,
                     new Length(['min' => 15])

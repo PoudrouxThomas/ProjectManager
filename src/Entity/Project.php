@@ -23,7 +23,7 @@ class Project
     #[ORM\Column(type: Types::TEXT)]
     private ?string $presentation = null;
 
-    #[ORM\OneToMany(mappedBy: 'project_id', targetEntity: Task::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, orphanRemoval: true)]
     private Collection $tasks;
 
     public function __construct()

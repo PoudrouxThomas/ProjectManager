@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html, body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.alert {
+    padding: 10px;
+    color: white;
+    text-align: center;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    
+    &.alert-info {
+        background-color: blue;
+    }
+    
+    &.alert-error {
+        background-color: red;
+    }
+    
+    &.alert-success {
+        background-color: green;
+    }
+}
