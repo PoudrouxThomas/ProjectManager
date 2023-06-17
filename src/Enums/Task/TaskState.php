@@ -8,4 +8,14 @@ enum TaskState: string
     case ASSIGNED = "ASSIGNED";
     case COMPLETED = "COMPLETED";
     case ARCHIVED = "ARCHIVED";
+
+    public function toString(): ?string
+    {
+        return match ($this) {
+            self::CREATED => 'Created',
+            self::ASSIGNED => 'Assigned',
+            self::COMPLETED => 'Completed',
+            self::ARCHIVED => 'Archived',
+        };
+    }
 }
