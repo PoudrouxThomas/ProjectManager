@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Enums\Task\TaskState;
+use App\Form\CommentType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskCommentRepository;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,5 +41,31 @@ class TaskController extends AbstractController
         }
 
         return $this->render('task/create.html.twig', ['form' => $form, 'projectId' => $projectId]);
+    }
+
+    #[Route('/task/{taskId<[0-9]+>}', name: 'app_task_show')]
+    public function show(int $taskId, Request $request, TaskRepository $taskRepo, TaskCommentRepository $commentRepo)
+    {
+        $task = $taskRepo->find($taskId);
+
+        $form = $this->createForm(CommentType::class);
+
+        $form->handleRequest($request);
+
+        if($this->getUser() && $form->isSubmitted() && $form->isValid())
+        {
+            $comment = $form->getData();
+
+            $comment->setAuthor($this->getUser());
+            $comment->setTask($task);
+
+            $commentRepo->save($comment, true);
+
+            $this->addFlash('success', 'Your comment has been added !');
+
+            return $this->redirectToRoute('app_task_show', ['taskId' => $task->getId()]);
+        }
+
+        return $this->render('task/show.html.twig', compact('task', 'form'));
     }
 }

@@ -14,17 +14,19 @@
     </p>
 
     {% for task in project.tasks %}
-        <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
-            <div class="flex grid-cols-2 gap-2">
-                <h2 class="flex text-lg italic underline">{{ task.name }}</h2><span class="text-sm mt-1 mr-1 text-gray-400 align-baseline"> - Created by {{ task.author ? task.author.username : "Unknown" }}</span>
-                <span class="grow text-right">
-                    <span class="inline-block w-[110px] state state-{{ task.state.toString()|lower}} text-center">
-                        {{ task.state.toString()}}
+        <a href="{{ path('app_task_show', {'taskId': task.id}) }}">
+            <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+                <div class="flex grid-cols-2 gap-2">
+                    <h2 class="flex text-lg italic underline">{{ task.name }}</h2><span class="text-sm mt-1 mr-1 text-gray-400 align-baseline"> - Created by {{ task.author ? task.author.username : "Unknown" }}</span>
+                    <span class="grow text-right">
+                        <span class="inline-block w-[110px] state state-{{ task.state.toString()|lower}} text-center">
+                            {{ task.state.toString()}}
+                        </span>
                     </span>
-                </span>
+                </div>
+                <p class="ml-3">{{ task.description }}</p>
             </div>
-            <p class="ml-3">{{ task.description }}</p>
-        </div>
+        </a>
     {% endfor %}
 
     <div class="text-right">
