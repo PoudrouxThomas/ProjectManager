@@ -39,6 +39,15 @@ class ProjectRepository extends ServiceEntityRepository
         }
     }
 
+    public function getProjectsWithTeams()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.team_members', 'u')
+            ->addSelect('u')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Project[] Returns an array of Project objects
 //     */

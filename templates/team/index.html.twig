@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teams{% endblock %}
+
+{% block body %}
+
+    <h1 class="p-2 text-center text-3xl italic underline font-bold">Teams</h1>
+
+    {% for project in projects %}
+
+        <div class="max-w-7xl mx-auto">
+            <div class="d-block drop-shadow-md m-3 p-3 shadow shadow-gray-400 rounded">
+                <div class="flex">
+                    <h2 class="flex text-lg italic underline">{{ project.name }}</h2>
+                </div>
+                <div class="ml-3 mt-3">
+                    {% if project.teamMembers|length > 0 %}
+                        {% for user in project.teamMembers %}
+                            <p class="ml-3">- {{ user.username }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="ml-3">There is no members working on this project.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        
+    {% endfor %}
+
+{% endblock %}
