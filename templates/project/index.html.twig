@@ -19,10 +19,12 @@
     </a>
 {% endfor %}
 
-<div class="text-right">
-    <a href="{{ path('app_project_create') }}" class="underline text-orange-500 hover:text-orange-600">
-        + Add project
-    </a>
-</div>
+{% if is_granted("ROLE_PROJECT_MANAGER") or is_granted("ROLE_TEAM_MANAGER") %}
+    <div class="text-right">
+        <a href="{{ path('app_project_create') }}" class="underline text-orange-500 hover:text-orange-600">
+            + Add project
+        </a>
+    </div>
+{% endif %}
 
 {% endblock %}

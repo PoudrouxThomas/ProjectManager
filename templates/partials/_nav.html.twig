@@ -23,10 +23,12 @@
                         class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
                         PROJECTS
                     </a>
-                    <a href="{{ path('app_team') }}"
-                        class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
-                        TEAM
-                    </a>
+                    {% if is_granted('ROLE_TEAM_MANAGER') %}
+                        <a href="{{ path('app_team') }}"
+                            class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">
+                            TEAM
+                        </a>
+                    {% endif %}
                     {% if app.user %}
                         <a href="{{ path('app_logout') }}"
                             class="block lg:inline-block text-md font-bold  text-gray-900  sm:hover:border-indigo-400  hover:text-orange-500 mx-2 focus:text-blue-500  p-1 hover:bg-gray-300 sm:hover:bg-transparent rounded-lg">

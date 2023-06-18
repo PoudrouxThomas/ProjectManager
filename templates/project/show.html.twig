@@ -37,11 +37,13 @@
             </a>
         {% endfor %}
 
-        <div class="text-right">
-            <a href="{{ path('app_task_create', {'projectId': project.id }) }}" class="underline text-orange-500 hover:text-orange-600">
-                + Add task
-            </a>
-        </div>
+        {% if is_granted("ROLE_PROJECT_MANAGER") %}
+            <div class="text-right">
+                <a href="{{ path('app_task_create', {'projectId': project.id }) }}" class="underline text-orange-500 hover:text-orange-600">
+                    + Add task
+                </a>
+            </div>
+        {% endif %}
     </div>
 
     <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
