@@ -35,9 +35,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Task::class)]
     private Collection $tasks;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: TaskComment::class)]
+    private Collection $taskComments;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->taskComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -134,6 +138,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($task->getAuthor() === $this) {
                 $task->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TaskComment>
+     */
+    public function getTaskComments(): Collection
+    {
+        return $this->taskComments;
+    }
+
+    public function addTaskComment(TaskComment $taskComment): static
+    {
+        if (!$this->taskComments->contains($taskComment)) {
+            $this->taskComments->add($taskComment);
+            $taskComment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskComment(TaskComment $taskComment): static
+    {
+        if ($this->taskComments->removeElement($taskComment)) {
+            // set the owning side to null (unless already changed)
+            if ($taskComment->getAuthor() === $this) {
+                $taskComment->setAuthor(null);
             }
         }
 
