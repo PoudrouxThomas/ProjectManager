@@ -42,9 +42,13 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskComment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'tasksAssigned')]
+    private Collection $assigned_users;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->assigned_users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,6 +142,30 @@ class Task
                 $comment->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, user>
+     */
+    public function getAssignedUsers(): Collection
+    {
+        return $this->assigned_users;
+    }
+
+    public function addAssignedUser(user $assignedUser): static
+    {
+        if (!$this->assigned_users->contains($assignedUser)) {
+            $this->assigned_users->add($assignedUser);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedUser(user $assignedUser): static
+    {
+        $this->assigned_users->removeElement($assignedUser);
 
         return $this;
     }

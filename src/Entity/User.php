@@ -41,11 +41,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'project_manager', targetEntity: Project::class)]
     private Collection $projects;
 
+    #[ORM\ManyToMany(targetEntity: Task::class, mappedBy: 'assigned_users')]
+    private Collection $tasksAssigned;
+
     public function __construct()
     {
         $this->tasksCreated = new ArrayCollection();
         $this->taskComments = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->tasksAssigned = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +212,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($project->getProjectManager() === $this) {
                 $project->setProjectManager(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasksAssigned(): Collection
+    {
+        return $this->tasksAssigned;
+    }
+
+    public function addTasksAssigned(Task $tasksAssigned): static
+    {
+        if (!$this->tasksAssigned->contains($tasksAssigned)) {
+            $this->tasksAssigned->add($tasksAssigned);
+            $tasksAssigned->addAssignedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTasksAssigned(Task $tasksAssigned): static
+    {
+        if ($this->tasksAssigned->removeElement($tasksAssigned)) {
+            $tasksAssigned->removeAssignedUser($this);
         }
 
         return $this;

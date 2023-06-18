@@ -1,49 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'Task #' %}
+{% block title %} {{ task.project.name }} - {{ task.name }} {% endblock %}
 
 {% block body %}
 
-<div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
-    <div class="flex grid-cols-2 gap-2">
-        <h2 class="flex text-lg italic underline">{{ task.name }}</h2><span class="text-sm mt-1 mr-1 text-gray-400 align-baseline"> - Created by {{ task.author ? task.author.username : "Unknown" }}</span>
-        <span class="grow text-right">
-            <span class="inline-block w-[110px] state state-{{ task.state.toString()|lower}} text-center">
-                {{ task.state.toString()}}
-            </span>
-        </span>
+<div class="grid grid-cols-4">
+    <div class="col-span-3">
+        <div class="d-block drop-shadow-md m-3 p-3 shadow shadow-gray-400 rounded">
+            <div class="flex grid-cols-2 gap-2">
+                <h2 class="flex text-lg italic underline">{{ task.name }}</h2><span class="text-sm mt-1 mr-1 text-gray-400 align-baseline"> - Created by {{ task.author ? task.author.username : "Unknown" }}</span>
+                <span class="grow text-right">
+                    <span class="inline-block w-[110px] state state-{{ task.state.toString()|lower}} text-center">
+                        {{ task.state.toString()}}
+                    </span>
+                </span>
+            </div>
+            <p class="ml-3 mt-3">{{ task.description }}</p>
+        </div>
+
+        {% for comment in task.comments %}
+            <div class="ml-10 d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+                <p class="font-bold">
+                    {{ comment.author ? comment.author.username : "Unknown" }}
+                    <span class="text-sm mt-1 mr-1 text-gray-400 align-baseline font-normal"> 
+                        on {{ comment.createdAt|date("F d, Y") }} at {{ comment.createdAt|date("H:i") }}
+                        {% if comment.createdAt != task.updatedAt %}
+                            (edited on {{ comment.updatedAt|date("F d, Y") }} at {{ comment.updatedAt|date("H:i") }})
+                        {% endif %}
+                    </span>
+                </p>
+                <p class="mt-3">{{ comment.content }}</p>
+            </div>
+        {% endfor %}
+
+
+        {% if app.user %}
+            <div class="mt-10 mx-10">
+                {{ form_start(form) }}
+                    {{ form_row(form.content, {
+                        label: 'Comment'
+                    }) }}
+
+                    <div class="grid grid-cols-8">
+                        <button type="submit" class="mt-4 col-start-8 bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block">Send</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
     </div>
-    <p class="ml-3">{{ task.description }}</p>
+
+    <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+
+        <div class="flex grid-cols-2 pr-3">
+            <h1 class="flex text-lg underline font-bold">{{ task.project.name }}</h1>
+            <div class="grow text-right">
+                <a href="{{ path('app_project_show', { 'id': task.project.id }) }}" class="underline text-orange-500 hover:text-orange-600">Back</a>
+            </div>
+        </div>
+
+        <p class="mt-3 text-lg underline">Assigned users :</p>
+
+        {% if task.assignedUsers is empty %}
+            <p class="ml-3">No users assigned to this task.</p>
+        {% else %}
+            {% for assignedUser in task.AssignedUsers %}
+                <p class="ml-3">- {{ assignedUser.username }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+
 </div>
 
-{% for comment in task.comments %}
-    <div class="ml-10 d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
-        <p class="font-bold">
-            {{ comment.author ? comment.author.username : "Unknown" }}
-            <span class="text-sm mt-1 mr-1 text-gray-400 align-baseline font-normal"> 
-                on {{ comment.createdAt|date("F d, Y") }} at {{ comment.createdAt|date("H:i") }}
-                {% if comment.createdAt != task.updatedAt %}
-                    (edited on {{ comment.updatedAt|date("F d, Y") }} at {{ comment.updatedAt|date("H:i") }})
-                {% endif %}
-            </span>
-        </p>
-        <p class="mt-3">{{ comment.content }}</p>
-    </div>
-{% endfor %}
-
-
-{% if app.user %}
-    <div class="mt-10 mx-10">
-        {{ form_start(form) }}
-            {{ form_row(form.content, {
-                label: 'Comment'
-            }) }}
-
-            <div class="grid grid-cols-8">
-                <button type="submit" class="mt-4 col-start-8 bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block">Send</button>
-            </div>
-        {{ form_end(form) }}
-    </div>
-{% endif %}
 
 {% endblock %}
