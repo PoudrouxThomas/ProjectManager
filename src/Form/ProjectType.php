@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Project;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,6 +31,13 @@ class ProjectType extends AbstractType
                     new NotBlank,
                     new Length(['min' => 15])
                 ]
+            ])
+            ->add('project_manager', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+                'query_builder' => function(UserRepository $userRepo) {
+                    return $userRepo->getProjectManagersQuery();
+                }
             ])
             ->setMethod('POST')
         ;

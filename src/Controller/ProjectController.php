@@ -37,6 +37,7 @@ class ProjectController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $project  = $form->getData();
+
             $projectRepo->save($project, true);
 
             $this->addFlash('success', 'Project created !');

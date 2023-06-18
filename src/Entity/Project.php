@@ -26,6 +26,9 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, orphanRemoval: true)]
     private Collection $tasks;
 
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    private ?User $project_manager = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -86,6 +89,23 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProjectManager(): ?User
+    {
+        return $this->project_manager;
+    }
+
+    public function setProjectManager(?User $project_manager): static
+    {
+        if(!in_array('ROLE_PROJECT_MANAGER', $project_manager->getRoles(), true))
+        {
+            throw new \Exception("This user isn't a project manager.");
+        }
+
+        $this->project_manager = $project_manager;
 
         return $this;
     }

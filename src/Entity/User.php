@@ -38,10 +38,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: TaskComment::class)]
     private Collection $taskComments;
 
+    #[ORM\OneToMany(mappedBy: 'project_manager', targetEntity: Project::class)]
+    private Collection $projects;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->taskComments = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +172,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($taskComment->getAuthor() === $this) {
                 $taskComment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if(!in_array('ROLE_PROJECT_MANAGER', $this->roles, true))
+        {
+            throw new \Exception("Can't give a project to a user who's not a project manager.");
+        }
+
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->setProjectManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            // set the owning side to null (unless already changed)
+            if ($project->getProjectManager() === $this) {
+                $project->setProjectManager(null);
             }
         }
 

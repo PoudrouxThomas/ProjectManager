@@ -11,7 +11,9 @@
 {% for project in projects %}
     <a href="{{ path('app_project_show', {id: project.id}) }}">
         <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
-            <h2 class="text-lg italic underline">{{ project.name }}</h2>
+            <h2 class="inline text-lg italic underline">{{ project.name }} </h2>
+            <span class="text-sm italic"> - Managed by {{ project.projectManager ? project.projectManager.username : "Unknown" }}</span>
+
             <p class="ml-3">{{ project.presentation }}</p>
         </div>
     </a>
