@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'task_comments')]
 #[ORM\Entity(repositoryClass: TaskCommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class TaskComment
 {
     use Timestampable;

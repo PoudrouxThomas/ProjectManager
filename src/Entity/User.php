@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Task::class)]
-    private Collection $tasks;
+    private Collection $tasksCreated;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: TaskComment::class)]
     private Collection $taskComments;
@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->tasks = new ArrayCollection();
+        $this->tasksCreated = new ArrayCollection();
         $this->taskComments = new ArrayCollection();
         $this->projects = new ArrayCollection();
     }
@@ -123,13 +123,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getTasks(): Collection
     {
-        return $this->tasks;
+        return $this->tasksCreated;
     }
 
     public function addTask(Task $task): static
     {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
+        if (!$this->tasksCreated->contains($task)) {
+            $this->tasksCreated->add($task);
             $task->setAuthor($this);
         }
 
@@ -138,7 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeTask(Task $task): static
     {
-        if ($this->tasks->removeElement($task)) {
+        if ($this->tasksCreated->removeElement($task)) {
             // set the owning side to null (unless already changed)
             if ($task->getAuthor() === $this) {
                 $task->setAuthor(null);

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: "tasks")]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Task
 {
     use Timestampable;
@@ -34,7 +35,7 @@ class Task
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(inversedBy: 'tasksCreated')]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $author = null;
 
