@@ -29,9 +29,13 @@ class Project
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?User $project_manager = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'assignedProjects')]
+    private Collection $team_members;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->team_members = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,6 +110,30 @@ class Project
         }
 
         $this->project_manager = $project_manager;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getTeamMembers(): Collection
+    {
+        return $this->team_members;
+    }
+
+    public function addTeamMember(User $teamMember): static
+    {
+        if (!$this->team_members->contains($teamMember)) {
+            $this->team_members->add($teamMember);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamMember(User $teamMember): static
+    {
+        $this->team_members->removeElement($teamMember);
 
         return $this;
     }

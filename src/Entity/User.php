@@ -39,17 +39,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $taskComments;
 
     #[ORM\OneToMany(mappedBy: 'project_manager', targetEntity: Project::class)]
-    private Collection $projects;
+    private Collection $managedProjects;
 
     #[ORM\ManyToMany(targetEntity: Task::class, mappedBy: 'assigned_users')]
-    private Collection $tasksAssigned;
+    private Collection $assignedTasks;
+
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'team_members')]
+    private Collection $assignedProjects;
 
     public function __construct()
     {
         $this->tasksCreated = new ArrayCollection();
         $this->taskComments = new ArrayCollection();
-        $this->projects = new ArrayCollection();
-        $this->tasksAssigned = new ArrayCollection();
+        $this->managedProjects = new ArrayCollection();
+        $this->assignedTasks = new ArrayCollection();
+        $this->assignedProjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,27 +191,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getProjects(): Collection
     {
-        return $this->projects;
+        return $this->managedProjects;
     }
 
-    public function addProject(Project $project): static
+    public function addManagedProject(Project $project): static
     {
         if(!in_array('ROLE_PROJECT_MANAGER', $this->roles, true))
         {
             throw new \Exception("Can't give a project to a user who's not a project manager.");
         }
 
-        if (!$this->projects->contains($project)) {
-            $this->projects->add($project);
+        if (!$this->managedProjects->contains($project)) {
+            $this->managedProjects->add($project);
             $project->setProjectManager($this);
         }
 
         return $this;
     }
 
-    public function removeProject(Project $project): static
+    public function removeManagedProject(Project $project): static
     {
-        if ($this->projects->removeElement($project)) {
+        if ($this->managedProjects->removeElement($project)) {
             // set the owning side to null (unless already changed)
             if ($project->getProjectManager() === $this) {
                 $project->setProjectManager(null);
@@ -222,23 +226,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getTasksAssigned(): Collection
     {
-        return $this->tasksAssigned;
+        return $this->assignedTasks;
     }
 
-    public function addTasksAssigned(Task $tasksAssigned): static
+    public function addTasksAssigned(Task $assignedTasks): static
     {
-        if (!$this->tasksAssigned->contains($tasksAssigned)) {
-            $this->tasksAssigned->add($tasksAssigned);
-            $tasksAssigned->addAssignedUser($this);
+        if (!$this->assignedTasks->contains($assignedTasks)) {
+            $this->assignedTasks->add($assignedTasks);
+            $assignedTasks->addAssignedUser($this);
         }
 
         return $this;
     }
 
-    public function removeTasksAssigned(Task $tasksAssigned): static
+    public function removeTasksAssigned(Task $assignedTasks): static
     {
-        if ($this->tasksAssigned->removeElement($tasksAssigned)) {
-            $tasksAssigned->removeAssignedUser($this);
+        if ($this->assignedTasks->removeElement($assignedTasks)) {
+            $assignedTasks->removeAssignedUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getAssignedProjects(): Collection
+    {
+        return $this->assignedProjects;
+    }
+
+    public function addAssignedProject(Project $assignedProject): static
+    {
+        if (!$this->assignedProjects->contains($assignedProject)) {
+            $this->assignedProjects->add($assignedProject);
+            $assignedProject->addTeamMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedProject(Project $assignedProject): static
+    {
+        if ($this->assignedProjects->removeElement($assignedProject)) {
+            $assignedProject->removeTeamMember($this);
         }
 
         return $this;
