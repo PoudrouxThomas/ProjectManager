@@ -4,20 +4,25 @@
 
 {% block body %}
 
-<h1 class="p-2 text-center text-3xl italic underline font-bold">Projects</h1>
+<h1 class="p-2 text-center text-3xl italic underline font-bold">{{ pageName }}</h1>
 
 <p class="text-center text-slate-700">Here is the full list of created projects : </p>
 
-{% for project in projects %}
-    <a href="{{ path('app_project_show', {id: project.id}) }}">
-        <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
-            <h2 class="inline text-lg italic underline">{{ project.name }} </h2>
-            <span class="text-sm italic"> - Managed by {{ project.projectManager ? project.projectManager.username : "Unknown" }}</span>
+{% if projects|length > 0 %}
+    {% for project in projects %}
+        <a href="{{ path('app_project_show', {id: project.id}) }}">
+            <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
+                <h2 class="inline text-lg italic underline">{{ project.name }} </h2>
+                <span class="text-sm italic"> - Managed by {{ project.projectManager ? project.projectManager.username : "Unknown" }}</span>
 
-            <p class="ml-3">{{ project.presentation }}</p>
-        </div>
-    </a>
-{% endfor %}
+                <p class="ml-3">{{ project.presentation }}</p>
+            </div>
+        </a>
+    {% endfor %}
+    
+{% else %}
+    <p>No projects are assigned to you.</p>
+{% endif %}
 
 {% if is_granted("ROLE_PROJECT_MANAGER") or is_granted("ROLE_TEAM_MANAGER") %}
     <div class="text-right">

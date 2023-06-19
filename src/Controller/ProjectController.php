@@ -8,17 +8,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjectController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ProjectRepository $projectRepo): Response
+    public function index(ProjectRepository $projectRepo, Request $request): Response
     {
-        $projects = $projectRepo->findAll();
+        $seeAllProjects = $request->query->get('seeAllProjects');
+        if($this->getUser() && !$seeAllProjects)
+        {   
+            $pageName = "Your projects";
+            $projects = $this->getUser()->getProjectsToDisplay();
+        }
+        else
+        {
+            $pageName = "Projects" ;
+            $projects = $projectRepo->findAll();
+        }
 
-        return $this->render('project/index.html.twig', compact('projects'));
+        return $this->render('project/index.html.twig', compact('projects', 'pageName'));
     }
 
     #[Route('project/{id<[0-9]+>}', name: 'app_project_show')]

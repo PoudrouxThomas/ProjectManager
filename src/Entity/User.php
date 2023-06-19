@@ -274,4 +274,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getProjectsToDisplay()
+    {
+        return array_merge($this->assignedProjects->toArray(), $this->managedProjects->toArray());
+    }
 }
