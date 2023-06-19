@@ -224,12 +224,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Task>
      */
-    public function getTasksAssigned(): Collection
+    public function getAssignedTasks(): Collection
     {
         return $this->assignedTasks;
     }
 
-    public function addTasksAssigned(Task $assignedTasks): static
+    public function addAssignedTask(Task $assignedTasks): static
     {
         if (!$this->assignedTasks->contains($assignedTasks)) {
             $this->assignedTasks->add($assignedTasks);
@@ -239,7 +239,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeTasksAssigned(Task $assignedTasks): static
+    public function removeAssignedTask(Task $assignedTasks): static
     {
         if ($this->assignedTasks->removeElement($assignedTasks)) {
             $assignedTasks->removeAssignedUser($this);

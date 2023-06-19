@@ -68,4 +68,10 @@ class TaskController extends AbstractController
 
         return $this->render('task/show.html.twig', compact('task', 'form'));
     }
+
+    #[Route('task/user', name: 'app_task_user')]
+    public function userTasks()
+    {
+        return $this->render('task/user.html.twig');
+    }
 }

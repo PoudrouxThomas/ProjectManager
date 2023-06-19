@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ app.user.username }}'s tasks {% endblock %}
+
+{% block body %}
+
+<h1 class="p-2 text-center text-3xl italic underline font-bold">
+    Your tasks
+</h1>
+
+{% if app.user.assignedTasks|length > 0 %}
+    {% for task in app.user.assignedTasks %}
+        <a href="{{ path('app_task_show', { 'taskId': task.id }) }}">
+            <div class="d-block drop-shadow-md m-3 p-3 shadow shadow-gray-400 rounded">
+                <div class="text-sm text-slate-500 italic">
+                    {{ task.project.name }}
+                </div>
+                <div class="flex grid-cols-2 gap-2">
+                    <h2 class="flex text-lg italic underline">{{ task.name }}</h2><span class="text-sm mt-1 mr-1 text-gray-400 align-baseline"> - Created by {{ task.author ? task.author.username : "Unknown" }}</span>
+                    <span class="grow text-right">
+                        <span class="inline-block w-[110px] state state-{{ task.state.toString()|lower}} text-center">
+                            {{ task.state.toString()}}
+                        </span>
+                    </span>
+                </div>
+                <p class="ml-3 mt-3">{{ task.description }}</p>
+            </div>
+        </a>
+    {% endfor %}
+{% else %}
+    <p>No tasks were assigned to you.</p>
+{% endif %}
+
+{% endblock %}
