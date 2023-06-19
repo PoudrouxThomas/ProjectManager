@@ -48,6 +48,7 @@ class TaskController extends AbstractController
     {
         $task = $taskRepo->find($taskId);
 
+        // Form allowing to comment the current task
         $form = $this->createForm(CommentType::class);
 
         $form->handleRequest($request);
