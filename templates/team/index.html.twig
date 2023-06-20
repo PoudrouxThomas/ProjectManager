@@ -10,8 +10,15 @@
 
         <div class="max-w-7xl mx-auto">
             <div class="d-block drop-shadow-md m-3 p-3 shadow shadow-gray-400 rounded">
-                <div class="flex">
+                <div class="grid grid-cols-2">
                     <h2 class="flex text-lg italic underline">{{ project.name }}</h2>
+                    <div class="text-right">
+                        <a href="{{ path('app_team_edit', {id: project.id}) }}" class="inline">
+                            <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit team
+                            </button>
+                        </a>
+                    </div>
                 </div>
                 <div class="ml-3 mt-3">
                     {% if project.teamMembers|length > 0 %}

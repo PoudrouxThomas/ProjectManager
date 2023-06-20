@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team - {{ project.name }} {% endblock %}
+
+{% block body %}
+
+    <h1 class="p-2 text-center text-3xl italic underline font-bold">Team for {{ project.name }}</h1>
+    
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <input type="submit" class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block" value="Edit" formnovalidate />
+
+    {{ form_end(form) }}
+
+{% endblock %}
