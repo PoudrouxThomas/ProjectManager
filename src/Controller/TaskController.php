@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TaskController extends AbstractController
 {
     #[Route('/project/{projectId<[0-9]+>}/addTask', name: 'app_task_create')]
-    public function create(int  $projectId, Request $request, TaskRepository $taskRepo, ProjectRepository $projectRepo): Response
+    public function create(int $projectId, Request $request, TaskRepository $taskRepo, ProjectRepository $projectRepo): Response
     {
         $form = $this->createForm(TaskType::class);
 

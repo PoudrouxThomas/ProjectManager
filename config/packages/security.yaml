@@ -41,6 +41,7 @@ security:
         - { path: ^/project/[0-9]+/addTask, roles: [ROLE_PROJECT_MANAGER] }
         - { path: ^/task/user, roles: [ROLE_USER] }
         - { path: ^/project/[0-9]+/edit, roles: [ROLE_PROJECT_MANAGER] }
+        - { path: ^/task/[0-9]+/edit, roles: [ROLE_PROJECT_MANAGER] }
 
 when@test:
     security:

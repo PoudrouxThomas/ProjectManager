@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,6 +30,16 @@ class TaskType extends AbstractType
                     new NotBlank,
                     new Length(['min' => 15])
                 ]
+            ])
+            ->add('assigned_users', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+                'query_builder' => function(UserRepository $userRepo) use ($options) {
+                    return $userRepo->getTeamForProjectQuery($options["data"]->getProject()->getId());
+                },
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true
             ])
         ;
     }

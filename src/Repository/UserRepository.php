@@ -66,6 +66,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query;
     }
 
+    public function getTeamForProjectQuery($id): QueryBuilder
+    {
+        $query =  $this->createQueryBuilder('u')
+            ->leftJoin('u.assignedProjects', 'p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id);
+        return $query;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
