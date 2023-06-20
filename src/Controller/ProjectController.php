@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ProjectController extends AbstractController
 {
@@ -63,7 +66,25 @@ class ProjectController extends AbstractController
     {
         $project = $projectRepo->find($id);
 
-        $form = $this->createForm(ProjectType::class, $project);
+        // TeamManagers can only edit the project manager assigned to the project
+        if($this->isGranted('ROLE_TEAM_MANAGER'))
+        {
+            $form = $this->createFormBuilder($project)
+                ->add('project_manager', EntityType::class, [
+                    'class' => User::class,
+                    'choice_label' => 'username',
+                    'query_builder' => function(UserRepository $userRepo) {
+                        return $userRepo->getProjectManagersQuery();
+                    }
+                ])
+                ->getForm();
+        }
+        // Else, ProjectManagers can edit all the project except the project manager assigned to the project
+        else 
+        {
+            $form = $this->createForm(ProjectType::class, $project);
+        }
+        
 
         $form->handleRequest($request);
 

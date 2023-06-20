@@ -32,13 +32,6 @@ class ProjectType extends AbstractType
                     new Length(['min' => 15])
                 ]
             ])
-            ->add('project_manager', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-                'query_builder' => function(UserRepository $userRepo) {
-                    return $userRepo->getProjectManagersQuery();
-                }
-            ])
             ->setMethod('POST')
         ;
     }

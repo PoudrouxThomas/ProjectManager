@@ -38,7 +38,7 @@ security:
     access_control:
         - { path: ^/project/create, roles: [ROLE_TEAM_MANAGER, ROLE_PROJECT_MANAGER] }
         - { path: ^/project/[0-9]+/addTask, roles: [ROLE_PROJECT_MANAGER] }
-        - { path: ^/project/[0-9]+/edit, roles: [ROLE_PROJECT_MANAGER] }
+        - { path: ^/project/[0-9]+/edit, roles: [ROLE_PROJECT_MANAGER, ROLE_TEAM_MANAGER] }
         - { path: ^/team, roles: [ROLE_TEAM_MANAGER] }
         - { path: ^/task/user, roles: [ROLE_USER] }
         - { path: ^/task/[0-9]+/edit, roles: [ROLE_PROJECT_MANAGER] }

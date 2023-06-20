@@ -55,14 +55,16 @@
             {% endfor %}
         {% endif %}
         
-        {% if is_granted("ROLE_PROJECT_MANAGER") %}
+        {% if is_granted("ROLE_PROJECT_MANAGER") or is_granted("ROLE_TEAM_MANAGER") %}
             <div class="text-right mt-5">
                 <a href="{{ path('app_project_edit', {id: project.id}) }}" class="inline">
                     <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
                         <i class="fa-solid fa-pen-to-square"></i> Edit project
                     </button>
                 </a>
+        {% endif %}
                 
+        {% if is_granted("ROLE_PROJECT_MANAGER") %}
                 <div class="inline text-right">
                     <a href="{{ path('app_task_create', {'projectId': project.id }) }}" class="inline">
                         <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
