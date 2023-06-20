@@ -80,6 +80,16 @@
                 <p class="ml-3">- {{ assignedUser.username }}</p>
             {% endfor %}
         {% endif %}
+        
+        {% if is_granted("ROLE_PROJECT_MANAGER") %}
+            <div class="text-right mt-5">
+                <a href="{{ path('app_task_edit', {id: task.id}) }}" class="inline">
+                    <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit task
+                    </button>
+                </a>
+            </div>
+        {% endif %}
     </div>
 
 </div>

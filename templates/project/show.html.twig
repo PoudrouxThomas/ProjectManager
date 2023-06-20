@@ -36,14 +36,7 @@
                 </div>
             </a>
         {% endfor %}
-
-        {% if is_granted("ROLE_PROJECT_MANAGER") %}
-            <div class="text-right">
-                <a href="{{ path('app_task_create', {'projectId': project.id }) }}" class="underline text-orange-500 hover:text-orange-600">
-                    + Add task
-                </a>
-            </div>
-        {% endif %}
+        
     </div>
 
     <div class="d-block drop-shadow-md m-3 p-2 shadow shadow-gray-400 rounded">
@@ -61,7 +54,26 @@
                 <p class="ml-3">- {{ teamMember.username }}</p>
             {% endfor %}
         {% endif %}
+        
+        {% if is_granted("ROLE_PROJECT_MANAGER") %}
+            <div class="text-right mt-5">
+                <a href="{{ path('app_project_edit', {id: project.id}) }}" class="inline">
+                    <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit project
+                    </button>
+                </a>
+                
+                <div class="inline text-right">
+                    <a href="{{ path('app_task_create', {'projectId': project.id }) }}" class="inline">
+                        <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
+                            <i class="fa-solid fa-plus"></i> Add task
+                        </button>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
+
 
 {% endblock %}

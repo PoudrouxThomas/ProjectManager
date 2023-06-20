@@ -58,5 +58,26 @@ class ProjectController extends AbstractController
         return $this->render('project/create.html.twig', compact('form'));
     }
 
+    #[Route('project/{id<[0-9]+>}/edit', name: 'app_project_edit')]
+    public function edit(int $id, ProjectRepository $projectRepo, Request $request): Response
+    {
+        $project = $projectRepo->find($id);
+
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $projectRepo->save($project, true);
+
+            $this->addFlash('success', 'The project has been edited !');
+            
+            return $this->redirectToRoute('app_project_show', [ 'id' => $project->getId() ]);
+        }
+
+        return $this->render('project/edit.html.twig',compact('project', 'form'));
+    }
+
 
 }

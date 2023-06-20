@@ -70,6 +70,27 @@ class TaskController extends AbstractController
         return $this->render('task/show.html.twig', compact('task', 'form'));
     }
 
+    #[Route('/task/{id<[0-9]+>}/edit', name: 'app_task_edit')]
+    public function edit(int $id, Request $request, TaskRepository $taskRepo)
+    {
+        $task = $taskRepo->find($id);
+
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $taskRepo->save($task, true);
+
+            $this->addFlash('success', 'The task has been edited !');
+
+            return $this->redirectToRoute('app_task_show', ['taskId' => $task->getId()]);
+        }
+
+        return $this->render('task/edit.html.twig', compact('task', 'form'));
+    }
+
     #[Route('task/user', name: 'app_task_user')]
     public function userTasks()
     {

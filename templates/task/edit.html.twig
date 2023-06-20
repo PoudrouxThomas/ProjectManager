@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Edit task "{{ task.name }}" {% endblock %}
+ 
+{% block body %}
+
+<div class="max-w-md mx-auto">
+    <div>
+        <h1 class="p-2 text-center text-3xl italic underline font-bold">Edit task</h1>
+    </div>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <input type="submit" class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white rounded shadow p-4 block" value="Edit" formnovalidate />
+
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}
