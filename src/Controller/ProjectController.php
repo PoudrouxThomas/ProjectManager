@@ -17,17 +17,20 @@ class ProjectController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProjectRepository $projectRepo, Request $request): Response
     {
-        $seeAllProjects = $request->query->get('seeAllProjects');
-        if($this->getUser() && !$seeAllProjects)
-        {   
-            $pageName = "Your projects";
-            $projects = $this->getUser()->getProjectsToDisplay();
-        }
-        else
-        {
-            $pageName = "Projects" ;
-            $projects = $projectRepo->findAll();
-        }
+        if(!$this->getUser())
+            return $this->redirectToRoute('app_projects');
+
+        $pageName = "Your projects";
+        $projects = $this->getUser()->getProjectsToDisplay();
+
+        return $this->render('project/index.html.twig', compact('projects', 'pageName'));
+    }
+
+    #[Route('/projects', name: 'app_projects')]
+    public function showallProjects(ProjectRepository $projectRepo, Request $request): Response
+    {
+        $pageName = "Projects" ;
+        $projects = $projectRepo->findAll();
 
         return $this->render('project/index.html.twig', compact('projects', 'pageName'));
     }
