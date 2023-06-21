@@ -91,6 +91,24 @@ class TaskController extends AbstractController
         return $this->render('task/edit.html.twig', compact('task', 'form'));
     }
 
+
+    #[Route('task/{id<[0-9]+>}/delete', name: 'app_task_delete', methods: ["DELETE"])]
+    public function delete(int $id, TaskRepository $taskRepo, Request $request): Response
+    {
+        $token = $request->request->get('_token');
+        $task = $taskRepo->findOneBy(['id'=>$id]);
+
+        if(!$this->isCsrfTokenValid('task_delete_' . $task->getId(), $token)) {
+            throw  new \Exception('Invalid CSRF token.');
+        }
+
+        $taskRepo->remove($task, true);
+
+        $this->addFlash('success', 'Task successfully deleted !');
+        
+        return $this->redirectToRoute('app_project_show', ['id' => $task->getProject()->getId()]);
+    }
+
     #[Route('task/user', name: 'app_task_user', methods: ["GET"])]
     public function userTasks()
     {

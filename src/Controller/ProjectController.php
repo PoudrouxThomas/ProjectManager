@@ -104,5 +104,24 @@ class ProjectController extends AbstractController
         return $this->render('project/edit.html.twig',compact('project', 'form'));
     }
 
+    #[Route('project/{id<[0-9]+>}/delete', name: 'app_project_delete', methods: ["DELETE"])]
+    public function delete(int $id, ProjectRepository $projectRepo, Request $request): Response
+    {
+        $token = $request->request->get('_token');
+        $project = $projectRepo->findOneBy(['id'=>$id]);
+
+        if(!$this->isCsrfTokenValid('project_delete_' . $project->getId(), $token)) {
+            throw  new \Exception('Invalid CSRF token.');
+        }
+
+        $projectRepo->remove($project, true);
+
+        $this->addFlash('success', 'Project successfully deleted !');
+        
+        return $this->redirectToRoute('app_home');
+    }
+
+    
+
 
 }

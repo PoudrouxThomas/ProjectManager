@@ -55,16 +55,8 @@
             {% endfor %}
         {% endif %}
         
-        {% if is_granted("ROLE_PROJECT_MANAGER") or is_granted("ROLE_TEAM_MANAGER") %}
-            <div class="text-right mt-5">
-                <a href="{{ path('app_project_edit', {id: project.id}) }}" class="inline">
-                    <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
-                        <i class="fa-solid fa-pen-to-square"></i> Edit project
-                    </button>
-                </a>
-        {% endif %}
-                
-        {% if is_granted("ROLE_PROJECT_MANAGER") %}
+        <div class="text-right mt-5">
+            {% if is_granted("ROLE_PROJECT_MANAGER") %}
                 <div class="inline text-right">
                     <a href="{{ path('app_task_create', {'id': project.id }) }}" class="inline">
                         <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
@@ -72,8 +64,26 @@
                         </button>
                     </a>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+
+            {% if is_granted("ROLE_PROJECT_MANAGER") or is_granted("ROLE_TEAM_MANAGER") %}
+                <a href="{{ path('app_project_edit', {id: project.id}) }}" class="inline">
+                    <button class="px-2 py-1 bg-orange-500 hover:bg-orange-600 text-white shadow shadow-gray-400 rounded">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit project
+                    </button>
+                </a>
+            {% endif %}
+
+            {% if is_granted("ROLE_TEAM_MANAGER") %}
+                <button class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white shadow shadow-gray-400 rounded" onclick="event.preventDefault(); confirm('Are you sure ?') && document.getElementById('js-project-delete-form').submit();">
+                    <i class="fa-solid fa-trash"></i> Delete project
+                </button>
+                <form id="js-project-delete-form" action="{{ path('app_project_delete', {id: project.id}) }}" method="POST" style="display: none">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('project_delete_' ~ project.id) }}" />
+                </form>
+            {% endif %}
+        </div>
     </div>
 </div>
 
