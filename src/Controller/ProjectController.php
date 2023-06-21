@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ProjectController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: 'app_home', methods: ["GET"])]
     public function index(ProjectRepository $projectRepo, Request $request): Response
     {
         if(!$this->getUser())
@@ -26,7 +26,7 @@ class ProjectController extends AbstractController
         return $this->render('project/index.html.twig', compact('projects', 'pageName'));
     }
 
-    #[Route('/projects', name: 'app_projects')]
+    #[Route('/projects', name: 'app_projects', methods: ["GET"])]
     public function showallProjects(ProjectRepository $projectRepo, Request $request): Response
     {
         $pageName = "Projects" ;
@@ -35,7 +35,7 @@ class ProjectController extends AbstractController
         return $this->render('project/index.html.twig', compact('projects', 'pageName'));
     }
 
-    #[Route('project/{id<[0-9]+>}', name: 'app_project_show')]
+    #[Route('project/{id<[0-9]+>}', name: 'app_project_show', methods: ["GET"])]
     public function show(int $id, ProjectRepository $projectRepo): Response
     {
         $project = $projectRepo->find($id);
@@ -43,7 +43,7 @@ class ProjectController extends AbstractController
         return $this->render('project/show.html.twig',compact('project'));
     }
 
-    #[Route('project/create', name: 'app_project_create')]
+    #[Route('project/create', name: 'app_project_create', methods: ["GET", "POST"])]
     public function create(Request $request, ProjectRepository $projectRepo)
     {
         $form = $this->createForm(ProjectType::class);
@@ -64,7 +64,7 @@ class ProjectController extends AbstractController
         return $this->render('project/create.html.twig', compact('form'));
     }
 
-    #[Route('project/{id<[0-9]+>}/edit', name: 'app_project_edit')]
+    #[Route('project/{id<[0-9]+>}/edit', name: 'app_project_edit', methods: ["GET", "PUT"])]
     public function edit(int $id, ProjectRepository $projectRepo, Request $request): Response
     {
         $project = $projectRepo->find($id);
@@ -80,12 +80,13 @@ class ProjectController extends AbstractController
                         return $userRepo->getProjectManagersQuery();
                     }
                 ])
+                ->setMethod("PUT")
                 ->getForm();
         }
         // Else, ProjectManagers can edit all the project except the project manager assigned to the project
         else 
         {
-            $form = $this->createForm(ProjectType::class, $project);
+            $form = $this->createForm(ProjectType::class, $project, ['method' => 'PUT']);
         }
         
 

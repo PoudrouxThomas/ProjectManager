@@ -12,14 +12,23 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TaskType extends AbstractType
 {
+    public function __construct(protected RequestStack $requestStack)
+    {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $request = $this->requestStack->getCurrentRequest();
+
+        $projectId = $request->attributes->get('id');
+
         $builder
             ->add('name', TextType:: class, [
                 'constraints' => [
@@ -42,8 +51,8 @@ class TaskType extends AbstractType
             ->add('assigned_users', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'username',
-                'query_builder' => function(UserRepository $userRepo) use ($options) {
-                    return $userRepo->getTeamForProjectQuery($options["data"]->getProject()->getId());
+                'query_builder' => function(UserRepository $userRepo) use ($projectId) {
+                    return $userRepo->getTeamForProjectQuery($projectId);
                 },
                 'required' => false,
                 'multiple' => true,

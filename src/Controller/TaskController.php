@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
-    #[Route('/project/{projectId<[0-9]+>}/addTask', name: 'app_task_create')]
-    public function create(int $projectId, Request $request, TaskRepository $taskRepo, ProjectRepository $projectRepo): Response
+    #[Route('/project/{id<[0-9]+>}/addTask', name: 'app_task_create', methods: ["GET", "POST"])]
+    public function create(int $id, Request $request, TaskRepository $taskRepo, ProjectRepository $projectRepo): Response
     {
         $form = $this->createForm(TaskType::class);
 
@@ -27,7 +27,7 @@ class TaskController extends AbstractController
         {
             $task = $form->getData();
 
-            $project = $projectRepo->find($projectId);
+            $project = $projectRepo->find($id);
 
             $task
                 ->setState(TaskState::CREATED)
@@ -37,13 +37,13 @@ class TaskController extends AbstractController
             
             $this->addFlash('success', 'Your task has been added to the project !');
 
-            return $this->redirectToRoute('app_project_show', ['id' => $projectId]);
+            return $this->redirectToRoute('app_project_show', ['id' => $id]);
         }
 
-        return $this->render('task/create.html.twig', ['form' => $form, 'projectId' => $projectId]);
+        return $this->render('task/create.html.twig', ['form' => $form, 'projectId' => $id]);
     }
 
-    #[Route('/task/{taskId<[0-9]+>}', name: 'app_task_show')]
+    #[Route('/task/{taskId<[0-9]+>}', name: 'app_task_show', methods: ["GET", "POST"])]
     public function show(int $taskId, Request $request, TaskRepository $taskRepo, TaskCommentRepository $commentRepo)
     {
         $task = $taskRepo->find($taskId);
@@ -70,12 +70,12 @@ class TaskController extends AbstractController
         return $this->render('task/show.html.twig', compact('task', 'form'));
     }
 
-    #[Route('/task/{id<[0-9]+>}/edit', name: 'app_task_edit')]
+    #[Route('/task/{id<[0-9]+>}/edit', name: 'app_task_edit', methods: ["GET", "PUT"])]
     public function edit(int $id, Request $request, TaskRepository $taskRepo)
     {
         $task = $taskRepo->find($id);
 
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskType::class, $task, [ 'method' => 'PUT']);
 
         $form->handleRequest($request);
 
@@ -91,7 +91,7 @@ class TaskController extends AbstractController
         return $this->render('task/edit.html.twig', compact('task', 'form'));
     }
 
-    #[Route('task/user', name: 'app_task_user')]
+    #[Route('task/user', name: 'app_task_user', methods: ["GET"])]
     public function userTasks()
     {
         return $this->render('task/user.html.twig');

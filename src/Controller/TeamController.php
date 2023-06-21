@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TeamController extends AbstractController
 {
-    #[Route('/team', name: 'app_team')]
+    #[Route('/team', name: 'app_team', methods: ["GET"])]
     public function index(ProjectRepository $projectRepo): Response
     {
         $projects = $projectRepo->getProjectsWithTeams();
@@ -22,7 +22,7 @@ class TeamController extends AbstractController
         return $this->render('team/index.html.twig', compact('projects'));
     }
 
-    #[Route('/team/{id<[0-9]+>}/edit', name: 'app_team_edit')]
+    #[Route('/team/{id<[0-9]+>}/edit', name: 'app_team_edit', methods: ["GET", "PUT"])]
     public function edit(int $id, ProjectRepository $projectRepo, UserRepository $userRepo, Request $request): Response
     {
         $project = $projectRepo->getProjectWithTeam($id);
@@ -31,13 +31,14 @@ class TeamController extends AbstractController
             ->add('team_members', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'username',
-                'query_builder' => function(UserRepository $userRepo) use ($project) {
+                'query_builder' => function(UserRepository $userRepo) {
                     return $userRepo->getUsersQuery();
                 },
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true
             ])
+            ->setMethod("PUT")
             ->getForm();
 
         $form->handleRequest($request);

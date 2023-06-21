@@ -32,7 +32,6 @@ class ProjectType extends AbstractType
                     new Length(['min' => 15])
                 ]
             ])
-            ->setMethod('POST')
         ;
     }
 

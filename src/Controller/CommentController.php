@@ -13,11 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
 {
-    #[Route('/comment/{commentId<[0-9]+>}/edit', name: 'app_comment_edit')]
+    #[Route('/comment/{commentId<[0-9]+>}/edit', name: 'app_comment_edit', methods: ['GET', 'PUT'])]
     public function edit(int $commentId, TaskCommentRepository $taskCommentRepo, Request $request): Response
     {
         $comment = $taskCommentRepo->find($commentId);
-        $form =  $this->createForm(CommentType::class, $comment);
+        $form =  $this->createForm(CommentType::class, $comment, ['method' =>  'PUT']);
 
         $form->handleRequest($request);
 
